@@ -6,7 +6,7 @@ This repo is a comprehensive notebook for building a DeepFake Detection System u
 
 1. Clone the repository: `git clone https://github.com/DangCongKhai/deep_fake_detection.git`
 2. Dependencies: 
-- Install uv from [here](https://docs.astral.sh/uv/installation/)
+- Install uv from [here](https://docs.astral.sh/uv/getting-started/installation/)
 - Sync dependencies: In your terminal, run `uv sync`
 - Add new packages or dependencies: run `uv add [package-name]`
 
