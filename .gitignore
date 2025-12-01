@@ -8,3 +8,10 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Sandbox
+sandbox.ipynb
+
+
+# Ignore data folder due to large size
+data/
