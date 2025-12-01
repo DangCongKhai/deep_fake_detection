@@ -1,12 +1,12 @@
 from torchvision import transforms
 
-def get_transforms(model_name='mesonet', split='train'):
+def get_transforms(model_name='simpleCNN', split='train'):
     """
     Returns transforms based on model requirements.
-        - mesonet: expects 256x256 and simple 0-1 scaling
+        - simpleCNN: expects 256x256 and simple 0-1 scaling
         - efficientnet: expects 224x224 and ImageNet normalization
     """
-    if model_name.lower() == 'mesonet':
+    if model_name.lower() == 'simplecnn':
         transform_list = [
             transforms.Resize((256, 256)),
             transforms.ToTensor()]
