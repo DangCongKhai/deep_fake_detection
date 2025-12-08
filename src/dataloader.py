@@ -120,7 +120,6 @@ def get_data_loaders(root_dir: str, model_name:str, batch_size: int = 32):
     # train_classes_found = sorted([d for d in os.listdir(train_dir) if os.path.isdir(os.path.join(train_dir, d))])
     # class_to_idx = {class_name: i for i, class_name in enumerate(train_classes_found)}
     # print(f"Class found: {class_to_idx}")
-    actual_labels_found = set([label for _, label in train_dataset.data])
-    print(f"Class found: {actual_labels_found}")
+    print("Label mapping:", {c: i for i, c in enumerate(CLASS)})
     
     return train_loader, valid_loader

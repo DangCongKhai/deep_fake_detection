@@ -148,12 +148,15 @@ def get_all_predictions(model, loader, device):
         
     return y_true, y_pred
 
-def performance(model, loader, device, model_name, task_name, class_names=['real', 'fake']):
-    from sklearn.metrics import confusion_matrix, accuracy_score
+def performance(model, loader, device, model_name, task_name, result_path, class_names=['real', 'fake']):
+    from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
     y_true, y_pred = get_all_predictions(model, loader, device)
     
     acc = accuracy_score(y_true, y_pred)
     print(f"Accuracy score: {acc:.4f}")
+    
+    print("Classification Report")
+    print(classification_report(y_true, y_pred))
     
     cm = confusion_matrix(y_true, y_pred)
     plt.figure(figsize=(8, 6))
@@ -164,6 +167,6 @@ def performance(model, loader, device, model_name, task_name, class_names=['real
     plt.xlabel('Predicted Label')
     plt.ylabel('True Label')
     plt.title(f'{model_name} Confusion Matrix')
-    img_save = f"../results/{model_name}_{task_name}_cfm.png"
+    img_save = f"{result_path}/{model_name}_{task_name}_cfm.png"
     plt.savefig(img_save)
     plt.show()

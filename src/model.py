@@ -87,9 +87,9 @@ class SimpleCNN(nn.Module):
     
 
 
-class EffcientNetDF(nn.Module):
+class EfficientNetDF(nn.Module):
     def __init__(self, num_classes=1, pretrained=True):
-        super(EffcientNetDF, self).__init__()
+        super(EfficientNetDF, self).__init__()
         
         weights = models.EfficientNet_B0_Weights.DEFAULT if pretrained else None
         self.model = models.efficientnet_b0(weights=weights)
