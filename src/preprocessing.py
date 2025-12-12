@@ -53,6 +53,8 @@ def get_train_transforms(model_name: str = "simpleCNN"):
     """    
     if model_name.lower() == "simplecnn":
         resize_size = (256, 256)
+    elif model_name.lower() == "xception":
+        resize_size = (299, 299)
     else:
         resize_size = (224, 224)
         
@@ -91,6 +93,7 @@ def get_val_transforms(model_name='simpleCNN'):
 
     Resizing depends on the model architecture:
         - simpleCNN      → 256x256
+        - xception       → 299x299
         - else           → 224x224
 
     Validation set must NOT apply noise or random augmentations.
@@ -103,6 +106,8 @@ def get_val_transforms(model_name='simpleCNN'):
     """
     if model_name.lower() == 'simplecnn':
         resize_size = (256, 256)
+    elif model_name.lower() == "xception":
+        resize_size = (299, 299)
     else:
         resize_size = (224, 224)
         
@@ -135,7 +140,7 @@ def get_transforms(model_name='simpleCNN', split='train'):
     
     if split == 'train':
         return get_train_transforms(model_name)
-    elif split in ['val', 'valid', 'validation']:
+    elif split in ['val', 'valid', 'validation', 'test']:
         return get_val_transforms(model_name)
     else:
-        raise ValueError("Split must be `train` or `val`")
+        raise ValueError("Split must be `train` or `val` or `test`")
