@@ -2,40 +2,14 @@ from torchvision import transforms
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
-# def get_transforms(model_name='simpleCNN', split='train'):
-#     """
-#     Returns transforms based on model requirements.
-#         - simpleCNN: expects 256x256 and simple 0-1 scaling
-#         - efficientnet: expects 224x224 and ImageNet normalization
-#     """
-#     if model_name.lower() == 'simplecnn':
-#         transform_list = [
-#             transforms.Resize((256, 256)),
-#             transforms.ToTensor(),
-#             transforms.Normalize(
-#                 mean=[0.485, 0.456, 0.406], 
-#                 std=[0.229, 0.224, 0.225])]
-        
-#     elif 'efficientnet' in model_name.lower():
-#         transform_list = [
-#             transforms.Resize((224, 224)),
-#             transforms.ToTensor(),
-#             transforms.Normalize(
-#                 mean=[0.485, 0.456, 0.406],
-#                  std=[0.229, 0.224, 0.225])]
-        
-#     else: 
-#         raise ValueError(f"Unknown model name: {model_name}")
-    
-#     return transforms.Compose(transforms=transform_list)
-
-def get_train_transforms(model_name: str = "simpleCNN"):
+def get_transformations(model_name, use_augmentation):
     """
-    Returns the training augmentation pipeline using Albumentations.
+    Returns the training pipeline using Albumentations.
     
     Resizing depends on the model architecture:
         - simpleCNN      → 256x256
-        - else           → 224x224
+        - xception       → 299x299
+        - else           → 224x224  
 
     Augmentations include:
         - Horizontal flips
@@ -47,7 +21,7 @@ def get_train_transforms(model_name: str = "simpleCNN"):
 
     Args:
         model_name (str): Name of the model architecture.
-
+        use_augmentation (bool): If True, augmentation will be applied.
     Returns:
         A.Compose: Albumentations preprocessing pipeline for training.
     """    
@@ -58,6 +32,20 @@ def get_train_transforms(model_name: str = "simpleCNN"):
     else:
         resize_size = (224, 224)
         
+    # Without augmentation
+    if not use_augmentation:
+        return A.Compose(
+            [
+                A.Resize(resize_size[0], resize_size[1]),
+                A.Normalize(
+                    mean=(0.485, 0.456, 0.406),
+                    std=(0.229, 0.224, 0.225)
+                ),
+                ToTensorV2()
+            ]
+        )
+    
+    # With augmentation
     return A.Compose(
         [
             A.HorizontalFlip(p=0.5),
@@ -87,49 +75,15 @@ def get_train_transforms(model_name: str = "simpleCNN"):
         ]
     )
     
-def get_val_transforms(model_name='simpleCNN'):
-    """
-    Returns validation/test preprocessing pipeline.
-
-    Resizing depends on the model architecture:
-        - simpleCNN      → 256x256
-        - xception       → 299x299
-        - else           → 224x224
-
-    Validation set must NOT apply noise or random augmentations.
-
-    Args:
-        model_name (str): Name of the model architecture.
-
-    Returns:
-        A.Compose: Albumentations preprocessing pipeline for validation/testing.
-    """
-    if model_name.lower() == 'simplecnn':
-        resize_size = (256, 256)
-    elif model_name.lower() == "xception":
-        resize_size = (299, 299)
-    else:
-        resize_size = (224, 224)
-        
-    return A.Compose(
-        [
-            A.Resize(resize_size[0], resize_size[1]),
-            A.Normalize(
-                mean=(0.485, 0.456, 0.406),
-                 std=(0.229, 0.224, 0.225)
-            ),
-            ToTensorV2(),
-        ]
-    )
     
-def get_transforms(model_name='simpleCNN', split='train'):
+def get_transforms(model_name, split, use_augmentation):
     """
     Master wrapper for selecting the correct transform pipeline.
 
     Args:
         model_name (str): 'simpleCNN', 'efficientnet_b0', etc.
-        split (str): 'train' or 'val'
-
+        split (str): 'train' or 'val' or 'test'
+        use_augmentation (bool): If True, augmentation will be applied.
     Returns:
         A.Compose: Albumentations pipeline for the requested split.
 
@@ -139,8 +93,8 @@ def get_transforms(model_name='simpleCNN', split='train'):
     split = split.lower()
     
     if split == 'train':
-        return get_train_transforms(model_name)
+        return get_transformations(model_name, use_augmentation)
     elif split in ['val', 'valid', 'validation', 'test']:
-        return get_val_transforms(model_name)
+        return get_transformations(model_name, use_augmentation = False)
     else:
         raise ValueError("Split must be `train` or `val` or `test`")

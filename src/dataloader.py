@@ -45,7 +45,7 @@ class DeepFakeImageDataset(Dataset):
         return original_image, transformed_image, y
     
 
-def get_data_loaders(root_dir: str, model_name:str, batch_size: int = 32):
+def get_data_loaders(root_dir: str, model_name:str, batch_size: int = 32, use_augmentation: bool = False):
     """
     Create PyTorch DataLoaders for training and validation image datasets.
     
@@ -66,7 +66,7 @@ def get_data_loaders(root_dir: str, model_name:str, batch_size: int = 32):
         root_dir: Path to the root directory containing 'train' and 'val' subfolders.
         model_name: Name of the model to determine the transforms pipeline
         batch_size: Number of samples per batch. Default is 32.
-        
+        use_augmentation: If True, augmentation will be applied.
     Returns:
         tuple:
             train_loader (torch.utils.data.DataLoader): DataLoader for training dataset.
@@ -79,9 +79,9 @@ def get_data_loaders(root_dir: str, model_name:str, batch_size: int = 32):
     test_dir = os.path.join(root_dir, 'test')
     
     # Transform
-    train_transform = get_transforms(model_name, split='train')
-    valid_transform = get_transforms(model_name, split='val')
-    test_transform = get_transforms(model_name, split='test')
+    train_transform = get_transforms(model_name, split='train', use_augmentation=use_augmentation)
+    valid_transform = get_transforms(model_name, split='val', use_augmentation=False)
+    test_transform = get_transforms(model_name, split='test', use_augmentation=False)
     
     # Dataset
     train_dataset = DeepFakeImageDataset(train_dir, transform=train_transform)
