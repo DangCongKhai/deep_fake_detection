@@ -21,8 +21,6 @@ def set_seed(seed=42):
     torch.backends.cudnn.benchmark = False
     
 
-
-
 # NOTE. Save Checkpoint & Experiment
 def save_checkpoint(model, optimizer, filename="checkpoint.pth"):
     checkpoint = {
@@ -50,11 +48,10 @@ def get_device():
     else:
         return "cpu"
     
-    
 
 def performance(model, loader, device, model_name, task_name, result_path, class_names=['real', 'fake']):
     from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
-    y_true, y_pred = get_all_predictions(model, loader, device)
+    _, y_true, y_pred = get_all_predictions(model, loader, device)
     
     acc = accuracy_score(y_true, y_pred)
     print(f"Accuracy score: {acc:.4f}")

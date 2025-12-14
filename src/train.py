@@ -13,7 +13,7 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device):
     
     loop = tqdm(dataloader, desc="Training")
         
-    for images, labels in loop:
+    for _, images, labels in loop:
         images = images.to(device)
         labels = labels.to(device)
         
@@ -49,7 +49,7 @@ def evaluate(model, dataloader, criterion, device):
     all_probs_real = []
     
     with torch.no_grad():
-        for images, labels in tqdm(dataloader, desc="Evaluating"):
+        for _, images, labels in tqdm(dataloader, desc="Evaluating"):
             images = images.to(device)
             labels = labels.to(device)
             
@@ -90,7 +90,7 @@ def get_all_predictions(model, loader, device):
     y_true = []
     
     with torch.no_grad():
-        for images, labels in tqdm(loader, desc="Getting predictions"):
+        for originals, images, labels in tqdm(loader, desc="Getting predictions"):
             images = images.to(device)
             labels = labels.to(device)
             
@@ -100,4 +100,4 @@ def get_all_predictions(model, loader, device):
             y_pred.extend(preds.cpu().numpy())
             y_true.extend(labels.cpu().numpy())
         
-    return y_true, y_pred
+    return originals, y_true, y_pred
