@@ -88,15 +88,16 @@ def get_all_predictions(model, loader, device):
     model.eval()
     y_pred = []
     y_true = []
-    
+    originals = []
     with torch.no_grad():
-        for originals, images, labels in tqdm(loader, desc="Getting predictions"):
+        for _, images, labels in tqdm(loader, desc="Getting predictions"):
             images = images.to(device)
             labels = labels.to(device)
             
             outputs = model(images)
             _, preds = torch.max(outputs, 1)
             
+            originals.extend(original_batch.cpu().numpy())
             y_pred.extend(preds.cpu().numpy())
             y_true.extend(labels.cpu().numpy())
         
