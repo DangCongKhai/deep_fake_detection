@@ -49,7 +49,70 @@ def get_device():
         return "cpu"
     
 
-def performance(model, loader, device, model_name, task_name, result_path, class_names=['real', 'fake']):
+# NOTE. Plot History
+def plot_history(history, title, save_path=None, start_finetuned_epoch=None):
+    epochs = range(1, len(history["train_losses"]) + 1)
+    fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+
+    plt.suptitle(title)
+
+    ax[0].plot(
+        epochs,
+        history["train_losses"],
+        label="training loss",
+        marker="*",
+        color="green",
+    )
+    ax[0].plot(
+        epochs, history["val_losses"], label="validation loss", marker="s", color="blue"
+    )
+    ax[0].set_title("Loss Curve")
+    ax[0].set_xlabel("Epoch")
+    ax[0].set_ylabel("Loss")
+    if start_finetuned_epoch is not None:
+        ax[0].axvline(
+            x=start_finetuned_epoch,
+            color="red",
+            linestyle="--",
+            label="Start Fine-Tuning",
+        )
+    ax[0].legend()
+    ax[0].grid(True, linestyle="--", alpha=0.7)
+
+    ax[1].plot(
+        epochs,
+        history["train_accuracy"],
+        label="training accuracy",
+        marker="*",
+        color="green",
+    )
+    ax[1].plot(
+        epochs,
+        history["val_accuracy"],
+        label="validation accuracy",
+        marker="s",
+        color="blue",
+    )
+    ax[1].set_title("Accuracy Curve")
+    ax[1].set_xlabel("Epoch")
+    ax[1].set_ylabel("Accuracy")
+    ax[1].legend()
+    if start_finetuned_epoch is not None:
+        ax[1].axvline(
+            x=start_finetuned_epoch,
+            color="red",
+            linestyle="--",
+            label="Start Fine-Tuning",
+        )
+    ax[1].grid(True, linestyle="--", alpha=0.7)
+
+    if save_path is not None:
+        plt.savefig(save_path)
+    plt.tight_layout()
+    plt.show()
+
+# NOTE. Performance Evaluation
+def performance(model, loader, device, model_name, save_path = None, class_names=['real', 'fake']):
     from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
     _, y_true, y_pred = get_all_predictions(model, loader, device)
     
@@ -68,6 +131,7 @@ def performance(model, loader, device, model_name, task_name, result_path, class
     plt.xlabel('Predicted Label')
     plt.ylabel('True Label')
     plt.title(f'{model_name} Confusion Matrix')
-    img_save = f"{result_path}/{model_name}_{task_name}_cfm.png"
-    plt.savefig(img_save)
+    if save_path is not None:
+        plt.savefig(save_path)
+    plt.tight_layout()
     plt.show()

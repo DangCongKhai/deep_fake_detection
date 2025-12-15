@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torchvision import models
-
+import timm
 class SimpleCNN(nn.Module):
     """
     Simple CNN Architecture: MesoNet (Meso-4)
@@ -103,3 +103,38 @@ class EfficientNetDF(nn.Module):
         
     def forward(self, x):
         return self.model(x)
+    
+    
+class Resnet18DF(nn.Module):
+    def __init__(self, num_classes = 2, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.model = models.resnet18(weights="IMAGENET1K_V1")
+        num_ftrs = self.model.fc.in_features
+        params = list(self.model.parameters())
+        for param in params:
+            param.requires_grad = False
+            
+        self.model.fc = nn.Sequential(
+            nn.Dropout(p=0.2, inplace=True),
+            nn.Linear(num_ftrs, num_classes)
+        )
+
+    def forward(self, X):
+        return self.model(X)
+    
+
+class XceptionDF(nn.Module):
+    def __init__(self, num_classes = 2, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.model = timm.create_model("xception", pretrained=True)
+        num_ftrs = self.model.fc.in_features
+        for param in self.model.parameters():
+            param.requires_grad = False # Freeze base model
+            
+        self.model.fc = nn.Sequential(
+            nn.Dropout(p=0.2, inplace=True),
+            nn.Linear(num_ftrs, num_classes)
+        )
+
+    def forward(self, X):
+        return self.model(X)
