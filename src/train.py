@@ -90,7 +90,7 @@ def get_all_predictions(model, loader, device):
     y_true = []
     originals = []
     with torch.no_grad():
-        for _, images, labels in tqdm(loader, desc="Getting predictions"):
+        for original_batch, images, labels in tqdm(loader, desc="Getting predictions"):
             images = images.to(device)
             labels = labels.to(device)
             
