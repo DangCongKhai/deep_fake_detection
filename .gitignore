@@ -22,3 +22,5 @@ model_checkpoints/
 
 # Ignore test file
 notebooks/xception.ipynb
+notebooks/experiment-notebook.ipynb
+
