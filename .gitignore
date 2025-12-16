@@ -15,6 +15,7 @@ sandbox.ipynb
 
 # Ignore data folder due to large size
 data/
+data_aug/
 
 # Ignore large .pth file
 model_checkpoints/
