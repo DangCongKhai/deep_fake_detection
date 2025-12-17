@@ -20,7 +20,5 @@ data_aug/
 # Ignore large .pth file
 model_checkpoints/
 
-# Ignore test file
-notebooks/xception.ipynb
-notebooks/experiment-notebook.ipynb
-
+# Ignore experiment notebooks/file
+*experiment*
