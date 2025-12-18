@@ -4,6 +4,7 @@ import tempfile
 import numpy as np
 from PIL import Image
 import streamlit as st
+from pathlib import Path
 import matplotlib.pyplot as plt
 
 import timm
@@ -11,6 +12,15 @@ import torch
 import torch.nn as nn
 from facenet_pytorch import MTCNN
 from torchvision import transforms, models
+
+def get_project_root():
+    try:
+        return Path(__file__).resolve().parent.parent
+    except NameError:
+        return Path(os.getcwd()).resolve()
+
+PROJECT_ROOT = get_project_root()
+MODEL_DIR = PROJECT_ROOT / "model_checkpoints"
 
 st.set_page_config(
     page_title='Deepfake Detection',
@@ -38,9 +48,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# MODEL DEFINITIONS
-# ==========================================
+# Model Definition
 class SimpleCNN(nn.Module):
     def __init__(self, num_classes=2):
         super(SimpleCNN, self).__init__()
@@ -129,9 +137,7 @@ class XceptionDF(nn.Module):
     def forward(self, X):
         return self.model(X)
     
-# ==========================================
 # UTILS (GradCAM & Cropper)
-# ==========================================
 class GradCAM:
     def __init__(self, model, target_layer):
         self.model = model
@@ -207,9 +213,7 @@ class FaceCropper:
             st.error(f"Face detection error: {e}")
             return None
         
-# ==========================================
 # HELPER FUNCTIONS
-# ==========================================
 def get_preprocessing(model_name):
     model_name = model_name.lower()
     if model_name in ['simplecnn', 'simple_cnn']: 
@@ -322,9 +326,7 @@ def process_file(file, num_frames=10):
     
     return final_data
 
-# ==========================================
 # MAIN APP
-# ==========================================
 st.title("🕵️‍♂️ Deepfake Detection Lab")
 st.write("Upload an image or video to detect if it's **Real** or **Fake**.")
 
@@ -342,10 +344,10 @@ MODEL_CHOICE = st.sidebar.radio(
 
 # Update your paths here
 MODEL_PATHS = {
-    "SimpleCNN": "D:/VNUK ASSIGNMENTS/3rd YEAR/1st SEM/AI/deepfake-detection/deep_fake_detection/model_checkpoints/simplecnn.pth",
-    "EfficientNet": "D:/VNUK ASSIGNMENTS/3rd YEAR/1st SEM/AI/deepfake-detection/deep_fake_detection/model_checkpoints/efficientnet.pth",
-    "Xception": "D:/VNUK ASSIGNMENTS/3rd YEAR/1st SEM/AI/deepfake-detection/deep_fake_detection/model_checkpoints/xception.pth",
-    "ResNet": "D:/VNUK ASSIGNMENTS/3rd YEAR/1st SEM/AI/deepfake-detection/deep_fake_detection/model_checkpoints/resnet.pth"}
+    "SimpleCNN": MODEL_DIR / "simplecnn.pth",
+    "EfficientNet": MODEL_DIR / "efficientnet.pth",
+    "Xception": MODEL_DIR / "xception.pth",
+    "ResNet": MODEL_DIR / "resnet.pth"}
 
 CURRENT_MODEL_PATH = MODEL_PATHS[MODEL_CHOICE]
 
