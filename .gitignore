@@ -22,3 +22,6 @@ model_checkpoints/
 
 # Ignore experiment notebooks/file
 *experiment*
+
+# Ignore fourier transform data
+fourier/
