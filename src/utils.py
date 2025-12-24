@@ -244,5 +244,5 @@ def plot_error_analysis(summary, model_name, save_path=None):
     plt.title(f'Accuracy on different facial forgery methods for {model_name}')
     plt.grid(False)
     if save_path is not None:
-        plt.savefig(save_path)
+        plt.savefig(save_path, bbox_inches='tight')
     plt.show()
