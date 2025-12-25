@@ -15,3 +15,13 @@ sandbox.ipynb
 
 # Ignore data folder due to large size
 data/
+data_aug/
+
+# Ignore large .pth file
+model_checkpoints/
+
+# Ignore experiment notebooks/file
+*experiment*
+
+# Ignore fourier transform data
+fourier/
