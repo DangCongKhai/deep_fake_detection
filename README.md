@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/badge/License-Academic-8a2be2.svg)
 ![UV](https://img.shields.io/badge/Dependency%20Manager-uv-4B9DA9.svg)
 
-===
+---
 
 This repository provides a comprehensive Deepfake Detection System built using Deep Learning. It covers the **full pipeline**, from dataset preprocessing and model training to deployment via a Streamlit Web Application.
 
