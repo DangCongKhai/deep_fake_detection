@@ -18,14 +18,10 @@ This repository provides a comprehensive Deepfake Detection System built using D
 ## **Project Architectures**
 ```python
 deep_fake_detection/
-│
 ├── .github/                    # GitHub workflows and configuration
 ├── .venv/                      # Local virtual environment (ignored)
-│
 ├── data/                       # Data for the project
-│
 ├── model_checkpoints/          # Saved model weights and checkpoints
-│
 ├── notebooks/                  # Research & experimentation notebooks
 │   ├── efficient-net.ipynb
 │   ├── face-crop-grad-cam.ipynb
@@ -33,20 +29,17 @@ deep_fake_detection/
 │   ├── resnet.ipynb
 │   ├── simple-cnn.ipynb
 │   └── xception.ipynb
-│
 ├── results/                    # Model evaluation outputs
 │   ├── efficient-net/
 │   ├── resnet18/
 │   ├── simple-cnn/
 │   └── xception/
-│
 ├── src/                        # Core DeepFake detection pipeline
 │   ├── __init__.py
 │   ├── dataloader.py           # Dataset loading & batching
 │   ├── model.py                # CNN architectures
 │   ├── preprocessing.py        # Face detection & image transforms
 │   └── utils.py                # Helper functions
-│
 ├── app.py                      # Streamlit web application entry point
 ├── dataset_construction.ipynb  # Dataset preparation & labeling
 ├── pyproject.toml              # Project dependencies (uv)
